@@ -9,7 +9,7 @@ class NbodySimulation < Gosu::Window
     self.caption = "NBody simulation"
     @background_image = Gosu::Image.new("images/space.jpg", tileable: true)
     @planet_list = []
-    File.open("planets.txt").each_with_index do |line, i|
+    File.open("simulations/kaleidoscope.txt").each_with_index do |line, i|
       info = line.split(" ")
       if i == 1
         @universe_size = line.to_f
@@ -18,6 +18,20 @@ class NbodySimulation < Gosu::Window
         planet = Planet.new(info[0].to_f, info[1].to_f, info[2].to_f, info[3].to_f, info[4].to_f, Gosu::Image.new("images/#{info[5]}"), @universe_size)
         @planet_list.push(planet)
       end
+    end
+  end
+
+  def update
+    @planet_list.each do |planet1|
+      @planet_list.each do |planet2|
+        if planet1 !=  planet2
+          planet1.force_y(planet2)
+          planet1.force_x(planet2)
+        end
+      end
+      planet1.accel_y()
+      planet1.accel_x()
+      planet1.reset_force()
     end
   end
 
