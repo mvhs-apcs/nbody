@@ -9,14 +9,27 @@ class NbodySimulation < Gosu::Window
     self.caption = "NBody simulation"
     @background_image = Gosu::Image.new("images/space.jpg", tileable: true)
     @planet_list = []
-    File.open("simulations/kaleidoscope.txt").each_with_index do |line, i|
+    planets_counter = 0
+    input = ARGV
+    filename = input[0]
+    File.open("simulations/#{filename}").each_with_index do |line, i|
       info = line.split(" ")
       if i == 1
         @universe_size = line.to_f
       end
+      if i == 0
+        @number_of_planets = line.to_f
+      end
       if i > 1
-        planet = Planet.new(info[0].to_f, info[1].to_f, info[2].to_f, info[3].to_f, info[4].to_f, Gosu::Image.new("images/#{info[5]}"), @universe_size)
-        @planet_list.push(planet)
+        if info[0] != nil  
+          planet = Planet.new(info[0].to_f, info[1].to_f, info[2].to_f, info[3].to_f, info[4].to_f, Gosu::Image.new("images/#{info[5]}"), @universe_size)
+          @planet_list.push(planet)
+          planets_counter += 1
+        end
+      end
+      puts planets_counter
+      if planets_counter == @number_of_planets
+        break
       end
     end
   end
