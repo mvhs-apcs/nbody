@@ -40,17 +40,23 @@ class NbodySimulation < Gosu::Window
         if planet1 !=  planet2
           planet1.force_y(planet2)
           planet1.force_x(planet2)
+          planet1.force_z(planet2)
         end
       end
       planet1.accel_y()
       planet1.accel_x()
+      planet1.accel_z()
       planet1.reset_force()
     end
   end
 
+
   def draw
     @background_image.draw(0, 0, ZOrder::Background)
     @planet_list.each do |planet|
+      if collision = true
+        planet.draw_split
+      end
       planet.draw
     end
   end
